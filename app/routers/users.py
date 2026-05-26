@@ -1,46 +1,32 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.fake_db import (
-    create_user,
-    delete_user,
-    get_user,
-    list_users,
-    update_user,
-)
-from app.schemas.user import UserCreate, UserOut, UserUpdate
+from app.crud.users import create_user, get_user, list_users
+from app.db.database import get_db
+from app.schemas.user import UserCreate, UserOut
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.get("", response_model=list[UserOut])
-def get_users() -> list[UserOut]:
-    return list_users()
+async def get_users(session: AsyncSession = Depends(get_db)) -> list[UserOut]:
+    return await list_users(session)
 
 
 @router.get("/{user_id}", response_model=UserOut)
-def get_user_by_id(user_id: int) -> UserOut:
-    user = get_user(user_id)
+async def get_user_by_id(
+    user_id: int,
+    session: AsyncSession = Depends(get_db),
+) -> UserOut:
+    user = await get_user(session, user_id)
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     return user
 
 
 @router.post("", response_model=UserOut, status_code=status.HTTP_201_CREATED)
-def create_user_item(payload: UserCreate) -> UserOut:
-    return create_user(payload)
-
-
-@router.put("/{user_id}", response_model=UserOut)
-def update_user_item(user_id: int, payload: UserUpdate) -> UserOut:
-    user = update_user(user_id, payload)
-    if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return user
-
-
-@router.delete("/{user_id}")
-def delete_user_item(user_id: int) -> dict:
-    user = delete_user(user_id)
-    if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return {"status": "deleted", "id": user_id}
+async def create_user_item(
+    payload: UserCreate,
+    session: AsyncSession = Depends(get_db),
+) -> UserOut:
+    return await create_user(session, payload)
