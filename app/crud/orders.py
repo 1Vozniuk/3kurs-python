@@ -18,6 +18,11 @@ async def list_orders(session: AsyncSession) -> list[Order]:
     return list(result.scalars().all())
 
 
+async def list_orders_for_user(session: AsyncSession, user_id: int) -> list[Order]:
+    result = await session.execute(select(Order).where(Order.user_id == user_id))
+    return list(result.scalars().all())
+
+
 async def get_order(session: AsyncSession, order_id: int) -> Order | None:
     result = await session.execute(select(Order).where(Order.id == order_id))
     return result.scalar_one_or_none()

@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from app.db.database import async_session
 from app.db.seed import seed_data
 from app.routers.categories import router as categories_router
+from app.routers.auth import router as auth_router
 from app.routers.orders import router as orders_router
 from app.routers.profiles import router as profiles_router
 from app.routers.products import router as products_router
@@ -21,6 +22,7 @@ async def lifespan(_: FastAPI):
 app = FastAPI(title="FastAPI Lab 4", lifespan=lifespan)
 
 app.include_router(users_router)
+app.include_router(auth_router)
 app.include_router(profiles_router)
 app.include_router(categories_router)
 app.include_router(products_router)

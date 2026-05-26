@@ -3,6 +3,7 @@ from decimal import Decimal
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.security import hash_password
 from app.db.models import Category, Order, Product, Profile, User
 
 
@@ -11,8 +12,16 @@ async def seed_data(session: AsyncSession) -> None:
     if existing.scalar_one_or_none() is not None:
         return
 
-    user_1 = User(name="Ivan Petrenko", email="ivan@example.com")
-    user_2 = User(name="Olena Kovalenko", email="olena@example.com")
+    user_1 = User(
+        name="Ivan Petrenko",
+        email="ivan@example.com",
+        hashed_password=hash_password("Password123"),
+    )
+    user_2 = User(
+        name="Olena Kovalenko",
+        email="olena@example.com",
+        hashed_password=hash_password("Password123"),
+    )
 
     profile_1 = Profile(user=user_1, bio="Backend developer", phone="+380000000001")
     profile_2 = Profile(user=user_2, bio="Product manager", phone="+380000000002")
