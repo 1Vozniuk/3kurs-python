@@ -6,6 +6,15 @@ class UserCreate(BaseModel):
     email: str = Field(min_length=3, max_length=200)
 
 
+class UserRegister(UserCreate):
+    password: str = Field(min_length=6, max_length=128)
+
+
+class UserLogin(BaseModel):
+    email: str = Field(min_length=3, max_length=200)
+    password: str = Field(min_length=6, max_length=128)
+
+
 class UserOut(UserCreate):
     id: int
 
