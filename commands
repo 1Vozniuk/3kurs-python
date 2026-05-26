@@ -1,0 +1,4 @@
+git merge prod
+docker compose up --build -d
+docker compose ps
+docker exec -it fastapi_app pip list
