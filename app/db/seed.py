@@ -4,7 +4,6 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.security import hash_password
-from app.core.security import hash_password
 from app.db.models import Category, Order, Product, Profile, User
 
 

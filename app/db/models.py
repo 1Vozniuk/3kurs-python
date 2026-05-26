@@ -62,7 +62,6 @@ class Product(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(150), nullable=False)
     price: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
-    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), nullable=False)
 
     category: Mapped[Category] = relationship("Category", back_populates="products")
