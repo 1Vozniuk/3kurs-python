@@ -1,15 +1,16 @@
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    db_host: str = "db"
-    db_port: int = 5432
-    db_user: str = "postgres"
-    db_password: str = "postgres"
-    db_name: str = "postgres"
-    jwt_secret_key: str = "change-me"
-    jwt_algorithm: str = "HS256"
-    access_token_expire_minutes: int = 60
+    db_host: str = Field(validation_alias="DB_HOST")
+    db_port: int = Field(validation_alias="DB_PORT")
+    db_user: str = Field(validation_alias="DB_USER")
+    db_password: str = Field(validation_alias="POSTGRES_PASSWORD")
+    db_name: str = Field(validation_alias="POSTGRES_DB")
+    jwt_secret_key: str = Field(validation_alias="JWT_SECRET_KEY")
+    jwt_algorithm: str = Field(validation_alias="JWT_ALGORITHM")
+    access_token_expire_minutes: int = Field(validation_alias="ACCESS_TOKEN_EXPIRE_MINUTES")
 
     model_config = SettingsConfigDict(env_file=".env", env_prefix="", extra="ignore")
 
